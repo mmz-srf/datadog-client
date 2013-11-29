@@ -1,12 +1,13 @@
 {
     "name": "Bayer/DataDogClient",
-    "type": "",
     "description": "Standalone DataDog HTTP Client, works without datadog agent",
     "keywords": ["datadog", "client", "http", "standalone"],
+    "homepage": "http://bayer.io",
     "license": "MIT",
     "authors": [
         {
             "name": "Matthias Bayer",
+            "email": "thematthiasbayer@gmail.com",
             "homepage": "http://bayer.io"
         }
     ],
