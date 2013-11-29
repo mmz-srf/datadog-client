@@ -2,6 +2,6 @@
 
 namespace Bayer\DataDogClient;
 
-class DataDogClient {
+class Client {
 
 }
