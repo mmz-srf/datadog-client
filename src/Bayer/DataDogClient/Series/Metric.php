@@ -2,8 +2,8 @@
 
 namespace Bayer\DataDogClient\Series;
 
+use Bayer\DataDogClient\Series\Metric\InvalidPointException;
 use Bayer\DataDogClient\Series\Metric\InvalidTypeException;
-use Bayer\DataDogClient\Series\Metric\Point;
 
 class Metric {
 
@@ -17,16 +17,23 @@ class Metric {
     protected $points = array();
 
     /**
-     * @param string        $name
-     * @param Point|Point[] $points
+     * A Metric groups multiple measure points.
+     *
+     * A single point or an array of multiple points
+     * can be specified during initiating.
+     *
+     * @param string $name
+     * @param array  $points
      */
-    public function __construct($name, $points) {
-        $this->setName($name);
-        if ($points instanceof Point) {
+    public function __construct($name, array $points) {
+        // Allow constructing with a single point
+        if (is_numeric($points[0])) {
             $points = array($points);
         }
-        $this->setPoints($points);
-        $this->setType(self::TYPE_GAUGE);
+
+        $this->setName($name)
+            ->setPoints($points)
+            ->setType(self::TYPE_GAUGE);
     }
 
     /**
@@ -140,14 +147,14 @@ class Metric {
     }
 
     /**
-     * @return Point[]
+     * @return array
      */
     public function getPoints() {
         return $this->points;
     }
 
     /**
-     * @param Point[] $points
+     * @param array $points
      *
      * @return Metric
      */
@@ -159,11 +166,35 @@ class Metric {
     }
 
     /**
-     * @param Point $point
+     * Add a new measure point to the metric.
+     *
+     * A point consists of an optional timestamp and a numeric value. If
+     * no timestamp is specified, the current timestamp will be used. Order
+     * matters. If a timestamp is specified, it should be the first value.
+     *
+     * Examples:
+     *   Simple point:   array(20)
+     *   With timestamp: array(1234567, 20)
+     *
+     * @param array $point
+     * @throws InvalidPointException
      *
      * @return Metric
      */
-    public function addPoint(Point $point) {
+    public function addPoint(array $point) {
+        // Add timestamp if non provided
+        if (!isset($point[1])) {
+            $point = array(time(), $point[0]);
+        }
+
+        if (!is_integer($point[0])) {
+            throw new InvalidPointException('Timestamp must be an integer');
+        }
+
+        if (!is_int($point[1]) && !is_float($point[1])) {
+            throw new InvalidPointException('Value must be integer or float');
+        }
+
         $this->points[] = $point;
 
         return $this;
@@ -198,12 +229,8 @@ class Metric {
         $data = array(
             'metric' => $this->getName(),
             'type'   => $this->getType(),
-            'points' => array(),
+            'points' => $this->getPoints(),
         );
-
-        foreach ($this->getPoints() as $point) {
-            $data['points'][] = $point->toArray();
-        }
 
         if ($host = $this->getHost()) {
             $data['host'] = $host;
@@ -222,6 +249,7 @@ class Metric {
 
     /**
      * @param $type
+     *
      * @return bool
      */
     protected function isValidType($type) {

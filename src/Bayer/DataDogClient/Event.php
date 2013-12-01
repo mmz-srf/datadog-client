@@ -38,12 +38,12 @@ class Event {
     protected $aggregationKey;
     protected $sourceType;
 
-    public function __construct($title, $text) {
-        $this->setTitle($title);
-        $this->setText($text);
-        $this->setTimestamp(time());
-        $this->setPriority(self::PRIORITY_NORMAL);
-        $this->setType(self::TYPE_INFO);
+    public function __construct($text, $title = '') {
+        $this->setText($text)
+            ->setTitle($title)
+            ->setTimestamp(time())
+            ->setPriority(self::PRIORITY_NORMAL)
+            ->setType(self::TYPE_INFO);
     }
 
     /**
@@ -241,11 +241,11 @@ class Event {
      */
     public function toArray() {
         $data = array(
-            'title' => $this->getTitle(),
-            'text'  => $this->getText(),
+            'title'         => $this->getTitle(),
+            'text'          => $this->getText(),
             'date_happened' => $this->getTimestamp(),
-            'priority' => $this->getPriority(),
-            'alert_type' => $this->getType(),
+            'priority'      => $this->getPriority(),
+            'alert_type'    => $this->getType(),
         );
 
         if ($tags = $this->getTags()) {

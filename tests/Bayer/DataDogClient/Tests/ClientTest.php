@@ -6,7 +6,6 @@ use Bayer\DataDogClient\Client;
 use Bayer\DataDogClient\Event;
 use Bayer\DataDogClient\Series;
 use Bayer\DataDogClient\Series\Metric;
-use Bayer\DataDogClient\Series\Metric\Point;
 
 class ClientTest extends \PHPUnit_Framework_TestCase {
 
@@ -40,11 +39,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSendSeries() {
-        $series = new Series();
+        $series  = new Series();
         $metric1 = new Metric('test.metric.name', array(
-            new Point(20, time()),
-            new Point(15, time() - 5),
-            new Point(10, time() - 10),
+            array(time(), 20),
+            array(time() - 5, 15),
+            array(time() - 10, 10),
         ));
         $metric1->setType(Metric::TYPE_GAUGE)
             ->setHost('host1.com')
@@ -53,9 +52,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         $series->addMetric($metric1);
 
         $metric2 = new Metric('test.metric2.name', array(
-            new Point(18, time()),
-            new Point(21, time() - 1),
-            new Point(12, time() - 2),
+            array(time(), 18),
+            array(time() - 1, 21),
+            array(time() - 2, 12),
         ));
         $metric2->setType(Metric::TYPE_COUNTER);
 

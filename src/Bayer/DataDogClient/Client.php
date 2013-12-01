@@ -3,6 +3,8 @@
 namespace Bayer\DataDogClient;
 
 use Bayer\DataDogClient\Client\EmptySeriesException;
+use Bayer\DataDogClient\Series\Metric;
+use Bayer\DataDogClient\Series\Metric\Point;
 
 class Client {
 
@@ -63,16 +65,10 @@ class Client {
             throw new EmptySeriesException('The series must contain metric data to send');
         }
 
-        $session = curl_init();
-        curl_setopt($session, CURLOPT_URL, self::ENDPOINT_SERIES .  $this->getApiKey());
-        curl_setopt($session, CURLOPT_CUSTOMREQUEST, 'POST');
-        curl_setopt($session, CURLOPT_HEADER, array('Content-Type: application/json'));
-        curl_setopt($session, CURLOPT_POSTFIELDS, json_encode($series->toArray()));
-        curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-
-        var_dump(json_encode($series->toArray()));
-        var_dump(curl_exec($session));
-        curl_close($session);
+        $this->send(
+            self::ENDPOINT_SERIES . $this->getApiKey(),
+            $series->toArray()
+        );
 
         return $this;
     }
@@ -82,17 +78,26 @@ class Client {
      * @return $this
      */
     public function sendEvent(Event $event) {
-        $session = curl_init();
-        curl_setopt($session, CURLOPT_URL, self::ENDPOINT_EVENT .  $this->getApiKey());
-        curl_setopt($session, CURLOPT_CUSTOMREQUEST, 'POST');
-        curl_setopt($session, CURLOPT_HEADER, array('Content-Type: application/json'));
-        curl_setopt($session, CURLOPT_POSTFIELDS, json_encode($event->toArray()));
-        curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-
-        var_dump(json_encode($event->toArray()));
-        var_dump(curl_exec($session));
-        curl_close($session);
+        $this->send(
+            self::ENDPOINT_EVENT . $this->getApiKey(),
+            $event->toArray()
+        );
 
         return $this;
+    }
+
+    /**
+     * @param $url
+     * @param $data
+     */
+    protected function send($url, $data) {
+        $session = curl_init();
+        curl_setopt($session, CURLOPT_URL, $url);
+        curl_setopt($session, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($session, CURLOPT_HEADER, array('Content-Type: application/json'));
+        curl_setopt($session, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+
+        curl_close($session);
     }
 }

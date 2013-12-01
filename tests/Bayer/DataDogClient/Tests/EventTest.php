@@ -6,7 +6,7 @@ use Bayer\DataDogClient\Event;
 
 class EventTest extends \PHPUnit_Framework_TestCase {
     public function testGetAndSetTitleAndText() {
-        $event = new Event('Title', 'Text');
+        $event = new Event('Text', 'Title');
         $this->assertEquals('Title', $event->getTitle());
         $this->assertEquals('Text', $event->getText());
 
@@ -18,7 +18,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetAndSetTimestamp() {
-        $event = new Event('Title', 'Text');
+        $event = new Event('Text', 'Title');
         $this->assertEquals(time(), $event->getTimestamp());
 
         $event->setTimestamp(123456789);
@@ -26,7 +26,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetAndSetPriority() {
-        $event = new Event('Title', 'Text');
+        $event = new Event('Text', 'Title');
         $this->assertEquals(Event::PRIORITY_NORMAL, $event->getPriority());
 
         $event->setPriority(Event::PRIORITY_LOW);
@@ -37,12 +37,12 @@ class EventTest extends \PHPUnit_Framework_TestCase {
      * @expectedException \Bayer\DataDogClient\Event\InvalidPriorityException
      */
     public function testInvalidPriorityThrowsException() {
-        $event = new Event('Title', 'Text');
+        $event = new Event('Text', 'Title');
         $event->setPriority('foo');
     }
 
     public function testGetAndSetTags() {
-        $event = new Event('Title', 'Text');
+        $event = new Event('Text', 'Title');
         $this->assertEmpty($event->getTags());
         $this->assertEquals(array(), $event->getTags());
 
@@ -52,7 +52,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
         $event->removeTag('foo');
         $this->assertCount(0, $event->getTags());
 
-        $event2 = new Event('Title', 'Text');
+        $event2 = new Event('Text', 'Title');
         $this->assertCount(0, $event2->getTags());
         $event2->setTags(
             array(
@@ -65,12 +65,12 @@ class EventTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testRemoveNonExistingTag() {
-        $event = new Event('Title', 'Text');
+        $event = new Event('Text', 'Title');
         $event->removeTag('foo');
     }
 
     public function testGetAndSetAlertType() {
-        $event = new Event('Title', 'Text');
+        $event = new Event('Text', 'Title');
 
         $this->assertEquals(Event::TYPE_INFO, $event->getType());
 
@@ -82,12 +82,12 @@ class EventTest extends \PHPUnit_Framework_TestCase {
      * @expectedException \Bayer\DataDogClient\Event\InvalidTypeException
      */
     public function testInvalidTypeThrowsException() {
-        $event = new Event('Title', 'Text');
+        $event = new Event('Text', 'Title');
         $event->setType('foo');
     }
 
     public function testGetAndSetAggregationKey() {
-        $event = new Event('Title', 'Text');
+        $event = new Event('Text', 'Title');
         $this->assertNull($event->getAggregationKey());
 
         $event->setAggregationKey('test');
@@ -95,7 +95,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetAndSetSourceType() {
-        $event = new Event('Title', 'Text');
+        $event = new Event('Text', 'Title');
         $this->assertNull($event->getSourceType());
 
         $event->setSourceType(Event::SOURCE_NAGIOS);
@@ -106,7 +106,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
      * @expectedException \Bayer\DataDogClient\Event\InvalidSourceTypeException
      */
     public function testInvalidSourceTypeThrowsException() {
-        $event = new Event('Title', 'Text');
+        $event = new Event('Text', 'Title');
         $event->setSourceType('foo');
     }
 }

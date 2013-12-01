@@ -4,15 +4,14 @@ namespace Bayer\DataDogClient\Tests;
 
 use Bayer\DataDogClient\Series;
 use Bayer\DataDogClient\Series\Metric;
-use Bayer\DataDogClient\Series\Metric\Point;
 
 class SeriesTest extends \PHPUnit_Framework_TestCase {
 
     public function testAddMetrics() {
         // Some test metrics
-        $metric1 = new Metric('test1.metric.name', new Point(20));
-        $metric2 = new Metric('test2.metric.name', new Point(30));
-        $metric3 = new Metric('test3.metric.name', new Point(40));
+        $metric1 = new Metric('test1.metric.name', array(20));
+        $metric2 = new Metric('test2.metric.name', array(30));
+        $metric3 = new Metric('test3.metric.name', array(40));
 
         // Add metric by method
         $series1 = new Series();
@@ -53,7 +52,7 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
 
     public function testGetMetricByName() {
         $series = new Series();
-        $metric = new Metric('test.metric.name', new Point(20));
+        $metric = new Metric('test.metric.name', array(20));
 
         $series->addMetric($metric);
         $this->assertEquals($metric, $series->getMetric('test.metric.name'));
@@ -69,7 +68,7 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
 
     public function testRemoveMetricByName() {
         $series = new Series();
-        $metric = new Metric('test.metric.name', new Point(20));
+        $metric = new Metric('test.metric.name', array(20));
 
         $series->addMetric($metric);
         $this->assertCount(1, $series->getMetrics());
@@ -94,7 +93,7 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
 
     public function testRemoveMetrics() {
         $series = new Series();
-        $metric = new Metric('test.metric.name', new Point(20));
+        $metric = new Metric('test.metric.name', array(20));
 
         $series->addMetric($metric);
         $this->assertCount(1, $series->getMetrics());
