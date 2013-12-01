@@ -3,9 +3,6 @@
 namespace Bayer\DataDogClient\Tests;
 
 use Bayer\DataDogClient\Event;
-use Bayer\DataDogClient\Event\InvalidPriorityException;
-use Bayer\DataDogClient\Event\InvalidTypeException;
-use Bayer\DataDogClient\Event\InvalidSourceTypeException;
 
 class EventTest extends \PHPUnit_Framework_TestCase {
     public function testGetAndSetTitleAndText() {
@@ -37,7 +34,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException InvalidPriorityException
+     * @expectedException \Bayer\DataDogClient\Event\InvalidPriorityException
      */
     public function testInvalidPriorityThrowsException() {
         $event = new Event('Title', 'Text');
@@ -54,6 +51,20 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 
         $event->removeTag('foo');
         $this->assertCount(0, $event->getTags());
+
+        $event2 = new Event('Title', 'Text');
+        $this->assertCount(0, $event2->getTags());
+        $event2->setTags(array(
+            array('foo', 'bar'),
+            array('bar', 'baz')
+        ));
+        $this->assertCount(2, $event2->getTags());
+        $event2->removeTags();
+    }
+
+    public function testRemoveNonExistingTag() {
+        $event = new Event('Title', 'Text');
+        $event->removeTag('foo');
     }
 
     public function testGetAndSetAlertType() {
@@ -66,7 +77,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException InvalidTypeException
+     * @expectedException \Bayer\DataDogClient\Event\InvalidTypeException
      */
     public function testInvalidTypeThrowsException() {
         $event = new Event('Title', 'Text');
@@ -90,7 +101,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException InvalidSourceTypeException
+     * @expectedException \Bayer\DataDogClient\Event\InvalidSourceTypeException
      */
     public function testInvalidSourceTypeThrowsException() {
         $event = new Event('Title', 'Text');

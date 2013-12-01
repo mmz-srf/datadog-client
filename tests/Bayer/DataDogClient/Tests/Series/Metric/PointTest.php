@@ -4,8 +4,6 @@ namespace Bayer\DataDogClient\Tests;
 
 use Bayer\DataDogClient\Series\Metric;
 use Bayer\DataDogClient\Series\Metric\Point;
-use Bayer\DataDogClient\Series\Metric\Point\InvalidValueException;
-use Bayer\DataDogClient\Series\Metric\Point\InvalidTimestampException;
 
 class PointTest extends \PHPUnit_Framework_TestCase {
 
@@ -34,14 +32,14 @@ class PointTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException InvalidValueException
+     * @expectedException \Bayer\DataDogClient\Series\Metric\Point\InvalidValueException
      */
     public function testAcceptOnlyNumericValues() {
         new Point('20');
     }
 
     /**
-     * @expectedException InvalidTimestampException
+     * @expectedException \Bayer\DataDogClient\Series\Metric\Point\InvalidTimestampException
      */
     public function testInvalidTimestampThrowsException() {
         new Point(20, '12320013');

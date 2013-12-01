@@ -20,7 +20,7 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
         $this->assertCount(0, $series1->getMetrics());
         $series1->addMetric($metric1);
         $this->assertCount(1, $series1->getMetrics());
-        $this->assertEquals($metric1, $series1->getMetrics()[0]);
+        $this->assertEquals($metric1, $series1->getMetrics()['test1.metric.name']);
 
         // Add multiple metrics
         $series2 = new Series();
@@ -30,7 +30,7 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
             $metric3
         ));
         $this->assertCount(3, $series2->getMetrics());
-        $this->assertEquals($metric1, $series2->getMetrics()[0]);
+        $this->assertEquals($metric1, $series2->getMetrics()['test1.metric.name']);
 
         // Set metrics
         $series3 = new Series();
@@ -38,7 +38,7 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
         $this->assertCount(3, $series3->getMetrics());
         $series3->setMetrics(array($metric1));
         $this->assertCount(1, $series3->getMetrics());
-        $this->assertEquals($metric1, $series3->getMetrics()[0]);
+        $this->assertEquals($metric1, $series3->getMetrics()['test1.metric.name']);
 
         // Add metric by constructor
         $series4 = new Series(array(
@@ -58,7 +58,7 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException MetricNotFoundException
+     * @expectedException \Bayer\DataDogClient\Series\MetricNotFoundException
      */
     public function testGetNonExistingMetricThrowsException() {
         $series = new Series();
@@ -76,7 +76,7 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException MetricNotFoundException
+     * @expectedException \Bayer\DataDogClient\Series\MetricNotFoundException
      */
     public function testRemoveNonExistingMetricThrowsException() {
         $series = new Series();

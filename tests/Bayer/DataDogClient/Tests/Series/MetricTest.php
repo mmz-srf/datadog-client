@@ -3,7 +3,6 @@
 namespace Bayer\DataDogClient\Tests;
 
 use Bayer\DataDogClient\Series\Metric;
-use Bayer\DataDogClient\Series\Metric\InvalidTypeException;
 use Bayer\DataDogClient\Series\Metric\Point;
 
 class MetricTest extends \PHPUnit_Framework_TestCase {
@@ -16,12 +15,12 @@ class MetricTest extends \PHPUnit_Framework_TestCase {
     public function testMetricType() {
         $metric = new Metric('test.metric.name', new Point(20));
         $this->assertEquals(Metric::TYPE_GAUGE, $metric->getType());
-        $metric->setType(Metric::TYPE_COUTNER);
+        $metric->setType(Metric::TYPE_COUNTER);
         $this->assertEquals(Metric::TYPE_COUNTER, $metric->getType());
     }
 
     /**
-     * @expectedException InvalidTypeException
+     * @expectedException \Bayer\DataDogClient\Series\Metric\InvalidTypeException
      */
     public function testInvalidMetricTypeThrowsException() {
         $metric = new Metric('test.metric.name', new Point(20));
@@ -45,6 +44,20 @@ class MetricTest extends \PHPUnit_Framework_TestCase {
 
         $metric->removeTag('foo');
         $this->assertCount(0, $metric->getTags());
+
+        $metric2 = new Metric('test.metric.name', new Point(20));
+        $this->assertCount(0, $metric2->getTags());
+        $metric2->setTags(array(
+                array('foo', 'bar'),
+                array('bar', 'baz')
+            ));
+        $this->assertCount(2, $metric2->getTags());
+        $metric2->removeTags();
+    }
+
+    public function testRemoveNonExistingTag() {
+        $metric = new Metric('test.metric.name', new Point(20));
+        $metric->removeTag('foo');
     }
 
     public function testAddSinglePoint() {
@@ -61,9 +74,8 @@ class MetricTest extends \PHPUnit_Framework_TestCase {
         // Add point by method
         $metric3 = new Metric('test.metric.name', new Point(40));
         $metric3->addPoint($point);
-        $this->assertCount(1, $metric3->getPoints());
-        $this->assertEquals($point, $metric3->getPoints()[1]);
         $this->assertCount(2, $metric3->getPoints());
+        $this->assertEquals($point, $metric3->getPoints()[1]);
         $metric3->addPoint(new Point(30));
         $this->assertCount(3, $metric3->getPoints());
 
