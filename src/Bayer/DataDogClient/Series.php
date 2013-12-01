@@ -90,11 +90,26 @@ class Series {
     }
 
     /**
-     *
+     * @return Series
      */
     public function removeMetrics() {
         $this->metrics = array();
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        $data = array();
+        foreach ($this->getMetrics() as $metric) {
+            /** @var Metric $metric */
+            $data[] = (object)$metric->toArray();
+        }
+
+        return array(
+            'series' => $data
+        );
     }
 }

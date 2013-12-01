@@ -236,6 +236,33 @@ class Event {
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function toArray() {
+        $data = array(
+            'title' => $this->getTitle(),
+            'text'  => $this->getText(),
+            'date_happened' => $this->getTimestamp(),
+            'priority' => $this->getPriority(),
+            'alert_type' => $this->getType(),
+        );
+
+        if ($this->getTags()) {
+            $data['tags'] = $this->getTags();
+        }
+
+        if ($this->getAggregationKey()) {
+            $data['aggregation_key'] = $this->getAggregationKey();
+        }
+
+        if ($this->getSourceType()) {
+            $data['source_type_name'] = $this->getSourceType();
+        }
+
+        return $data;
+    }
+
     protected function isValidType($type) {
         return in_array(
             $type,

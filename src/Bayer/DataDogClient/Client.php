@@ -5,6 +5,10 @@ namespace Bayer\DataDogClient;
 use Bayer\DataDogClient\Client\EmptySeriesException;
 
 class Client {
+
+    const ENDPOINT_EVENT  = 'https://app.datadoghq.com/api/v1/events?api_key=';
+    const ENDPOINT_SERIES = 'https://app.datadoghq.com/api/v1/series?api_key=';
+
     protected $apiKey;
     protected $applicationKey;
 
@@ -49,13 +53,44 @@ class Client {
         return $this;
     }
 
+    /**
+     * @param Series $series
+     * @return Client
+     * @throws Client\EmptySeriesException
+     */
     public function sendSeries(Series $series) {
         if (empty($series->getMetrics())) {
             throw new EmptySeriesException('The series must contain metric data to send');
         }
 
+        $session = curl_init();
+        curl_setopt($session, CURLOPT_URL, self::ENDPOINT_SERIES .  $this->getApiKey());
+        curl_setopt($session, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($session, CURLOPT_HEADER, array('Content-Type: application/json'));
+        curl_setopt($session, CURLOPT_POSTFIELDS, json_encode($series->toArray()));
+        curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+
+        var_dump(curl_exec($session));
+        curl_close($session);
+
         return $this;
     }
 
+    /**
+     * @param Event $event
+     * @return $this
+     */
+    public function sendEvent(Event $event) {
+        $session = curl_init();
+        curl_setopt($session, CURLOPT_URL, self::ENDPOINT_EVENT .  $this->getApiKey());
+        curl_setopt($session, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($session, CURLOPT_HEADER, array('Content-Type: application/json'));
+        curl_setopt($session, CURLOPT_POSTFIELDS, json_encode($event->toArray()));
+        curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 
+        var_dump(curl_exec($session));
+        curl_close($session);
+
+        return $this;
+    }
 }

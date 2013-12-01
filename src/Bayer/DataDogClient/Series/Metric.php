@@ -191,6 +191,32 @@ class Metric {
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function toArray() {
+        $data = array(
+            'metric' => $this->getName(),
+            'points' => $this->getPoints(),
+            'type'   => $this->getType()
+        );
+
+        if ($host = $this->getHost()) {
+            $data['host'] = $host;
+        }
+
+        if ($tags = $this->getTags()) {
+            $data['tags'] = $tags;
+        }
+
+        return $data;
+    }
+
+
+    /**
+     * @param $type
+     * @return bool
+     */
     protected function isValidType($type) {
         return in_array(
             $type,

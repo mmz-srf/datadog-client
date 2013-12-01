@@ -3,6 +3,7 @@
 namespace Bayer\DataDogClient\Tests;
 
 use Bayer\DataDogClient\Client;
+use Bayer\DataDogClient\Event;
 use Bayer\DataDogClient\Series;
 use Bayer\DataDogClient\Series\Metric;
 use Bayer\DataDogClient\Series\Metric\Point;
@@ -39,12 +40,40 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testSendSeries() {
-        $series = new Series(new Metric(
-            'test.metric.name',
-            new Point(20)
+        $series = new Series();
+        $metric1 = new Metric('test.metric.name', array(
+            new Point(20, time()),
+            new Point(15, time() - 5),
+            new Point(10, time() - 10),
         ));
+        $metric1->setType(Metric::TYPE_GAUGE)
+            ->setHost('host1.com')
+            ->addTag('test', 'tag');
+
+        $series->addMetric($metric1);
+
+        $metric2 = new Metric('test.metric2.name', array(
+            new Point(18, time()),
+            new Point(21, time() - 1),
+            new Point(12, time() - 2),
+        ));
+        $metric2->setType(Metric::TYPE_COUNTER);
+
+        $series->addMetric($metric2);
 
         $this->client->sendSeries($series);
+    }
+
+    public function testSendEvent() {
+        $event = new Event('TestEvent', 'This is a testevent');
+        $event->addTag('foo', 'bar')
+            ->setType(Event::TYPE_SUCCESS)
+            ->setSourceType(Event::SOURCE_MYAPPS)
+            ->setAggregationKey('unittest')
+            ->setPriority(Event::PRIORITY_LOW);
+
+        $this->client->sendEvent($event);
+
     }
 
     /**
