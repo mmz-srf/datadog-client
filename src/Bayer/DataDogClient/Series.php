@@ -50,6 +50,7 @@ class Series {
     public function setMetrics(array $metrics) {
         $this->removeMetrics();
         $this->addMetrics($metrics);
+
         return $this;
     }
 
@@ -60,6 +61,7 @@ class Series {
      */
     public function addMetric(Metric $metric) {
         $this->metrics[$metric->getName()] = $metric;
+
         return $this;
     }
 
@@ -67,6 +69,7 @@ class Series {
         foreach ($metrics as $metric) {
             $this->addMetric($metric);
         }
+
         return $this;
     }
 
@@ -79,6 +82,7 @@ class Series {
     public function removeMetric($name) {
         if (isset($this->metrics[$name])) {
             unset($this->metrics[$name]);
+
             return $this;
         }
 
@@ -90,6 +94,7 @@ class Series {
      */
     public function removeMetrics() {
         $this->metrics = array();
+
         return $this;
     }
 }

@@ -20,6 +20,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
     protected function setUp() {
         $this->client = new Client(self::API_KEY, self::APP_KEY);
     }
+
     public function testConstructor() {
         $client = new Client(self::API_KEY);
         $this->assertInstanceOf('Bayer\DataDogClient\Client', $client);

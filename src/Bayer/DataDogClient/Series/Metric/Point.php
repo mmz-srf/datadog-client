@@ -37,6 +37,7 @@ class Point {
             throw new InvalidValueException('Value must be numeric');
         }
         $this->value = $value;
+
         return $this;
     }
 
@@ -59,6 +60,7 @@ class Point {
             throw new InvalidTimestampException('Timestamp must be an integer');
         }
         $this->timestamp = $timestamp;
+
         return $this;
     }
 }

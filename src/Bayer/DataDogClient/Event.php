@@ -8,13 +8,13 @@ use Bayer\DataDogClient\Event\InvalidPriorityException;
 
 class Event {
 
-    const PRIORITY_NORMAL   = 'normal';
-    const PRIORITY_LOW      = 'low';
+    const PRIORITY_NORMAL = 'normal';
+    const PRIORITY_LOW    = 'low';
 
-    const TYPE_INFO         = 'info';
-    const TYPE_WARNING      = 'warning';
-    const TYPE_ERROR        = 'error';
-    const TYPE_SUCCESS      = 'success';
+    const TYPE_INFO    = 'info';
+    const TYPE_WARNING = 'warning';
+    const TYPE_ERROR   = 'error';
+    const TYPE_SUCCESS = 'success';
 
     const SOURCE_NAGIOS     = 'nagios';
     const SOURCE_HUDSON     = 'hudson';
@@ -60,6 +60,7 @@ class Event {
      */
     public function setTitle($title) {
         $this->title = $title;
+
         return $this;
     }
 
@@ -77,6 +78,7 @@ class Event {
      */
     public function setText($text) {
         $this->text = $text;
+
         return $this;
     }
 
@@ -94,6 +96,7 @@ class Event {
      */
     public function setTimestamp($timestamp) {
         $this->timestamp = $timestamp;
+
         return $this;
     }
 
@@ -115,6 +118,7 @@ class Event {
             throw new InvalidPriorityException('Priority must be on of Event::PRIORITY_*');
         }
         $this->priority = $priority;
+
         return $this;
     }
 
@@ -132,6 +136,7 @@ class Event {
      */
     public function setTags($tags) {
         $this->tags = $tags;
+
         return $this;
     }
 
@@ -143,6 +148,7 @@ class Event {
      */
     public function addTag($name, $value) {
         $this->tags[$name] = $value;
+
         return $this;
     }
 
@@ -204,6 +210,7 @@ class Event {
      */
     public function setAggregationKey($aggregationKey) {
         $this->aggregationKey = $aggregationKey;
+
         return $this;
     }
 
@@ -225,40 +232,50 @@ class Event {
             throw new InvalidSourceTypeException('SourceTyoe must be on of Event::SOURCE_*');
         }
         $this->sourceType = $sourceType;
+
         return $this;
     }
 
     protected function isValidType($type) {
-        return in_array($type, array(
-            self::TYPE_ERROR,
-            self::TYPE_INFO,
-            self::TYPE_SUCCESS,
-            self::TYPE_WARNING,
-        ));
+        return in_array(
+            $type,
+            array(
+                self::TYPE_ERROR,
+                self::TYPE_INFO,
+                self::TYPE_SUCCESS,
+                self::TYPE_WARNING,
+            )
+        );
     }
 
     protected function isValidSourceType($sourceType) {
-        return in_array($sourceType, array(
-            self::SOURCE_NAGIOS,
-            self::SOURCE_HUDSON,
-            self::SOURCE_JENKINS,
-            self::SOURCE_USER,
-            self::SOURCE_MYAPPS,
-            self::SOURCE_FEED,
-            self::SOURCE_CHEF,
-            self::SOURCE_PUPPET,
-            self::SOURCE_GIT,
-            self::SOURCE_BITBUCKET,
-            self::SOURCE_FABRIC,
-            self::SOURCE_CAPISTRANO,
-        ));
+        return in_array(
+            $sourceType,
+            array(
+                self::SOURCE_NAGIOS,
+                self::SOURCE_HUDSON,
+                self::SOURCE_JENKINS,
+                self::SOURCE_USER,
+                self::SOURCE_MYAPPS,
+                self::SOURCE_FEED,
+                self::SOURCE_CHEF,
+                self::SOURCE_PUPPET,
+                self::SOURCE_GIT,
+                self::SOURCE_BITBUCKET,
+                self::SOURCE_FABRIC,
+                self::SOURCE_CAPISTRANO,
+            )
+        );
     }
 
     protected function isValidPriority($priority) {
-        return in_array($priority, array(
-            self::PRIORITY_NORMAL,
-            self::PRIORITY_LOW,
-        ));
+        return in_array(
+            $priority,
+            array(
+                self::PRIORITY_NORMAL,
+                self::PRIORITY_LOW,
+            )
+        );
     }
 
 }

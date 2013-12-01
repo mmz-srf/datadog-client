@@ -13,11 +13,11 @@ class Metric {
     protected $name;
     protected $type;
     protected $host;
-    protected $tags   = array();
+    protected $tags = array();
     protected $points = array();
 
     /**
-     * @param string $name
+     * @param string        $name
      * @param Point|Point[] $points
      */
     public function __construct($name, $points) {
@@ -43,6 +43,7 @@ class Metric {
      */
     public function setName($name) {
         $this->name = $name;
+
         return $this;
     }
 
@@ -64,6 +65,7 @@ class Metric {
             throw new InvalidTypeException('Type must be one of Metric::TYPE_*');
         }
         $this->type = $type;
+
         return $this;
     }
 
@@ -81,6 +83,7 @@ class Metric {
      */
     public function setHost($host) {
         $this->host = $host;
+
         return $this;
     }
 
@@ -98,6 +101,7 @@ class Metric {
      */
     public function setTags($tags) {
         $this->tags = $tags;
+
         return $this;
     }
 
@@ -109,6 +113,7 @@ class Metric {
      */
     public function addTag($name, $value) {
         $this->tags[$name] = $value;
+
         return $this;
     }
 
@@ -118,7 +123,7 @@ class Metric {
      * @return Metric
      */
     public function removeTag($name) {
-        if(isset($this->tags[$name])) {
+        if (isset($this->tags[$name])) {
             unset($this->tags[$name]);
         }
 
@@ -130,6 +135,7 @@ class Metric {
      */
     public function removeTags() {
         $this->tags = array();
+
         return $this;
     }
 
@@ -148,6 +154,7 @@ class Metric {
     public function setPoints(array $points) {
         $this->removePoints();
         $this->addPoints($points);
+
         return $this;
     }
 
@@ -158,6 +165,7 @@ class Metric {
      */
     public function addPoint(Point $point) {
         $this->points[] = $point;
+
         return $this;
     }
 
@@ -170,6 +178,7 @@ class Metric {
         foreach ($points as $point) {
             $this->addPoint($point);
         }
+
         return $this;
     }
 
@@ -178,13 +187,17 @@ class Metric {
      */
     public function removePoints() {
         $this->points = array();
+
         return $this;
     }
 
     protected function isValidType($type) {
-        return in_array($type, array(
-            self::TYPE_GAUGE,
-            self::TYPE_COUNTER
-        ));
+        return in_array(
+            $type,
+            array(
+                self::TYPE_GAUGE,
+                self::TYPE_COUNTER
+            )
+        );
     }
 }

@@ -54,10 +54,12 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 
         $event2 = new Event('Title', 'Text');
         $this->assertCount(0, $event2->getTags());
-        $event2->setTags(array(
-            array('foo', 'bar'),
-            array('bar', 'baz')
-        ));
+        $event2->setTags(
+            array(
+                array('foo', 'bar'),
+                array('bar', 'baz')
+            )
+        );
         $this->assertCount(2, $event2->getTags());
         $event2->removeTags();
     }

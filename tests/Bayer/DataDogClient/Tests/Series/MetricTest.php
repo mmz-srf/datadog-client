@@ -47,10 +47,13 @@ class MetricTest extends \PHPUnit_Framework_TestCase {
 
         $metric2 = new Metric('test.metric.name', new Point(20));
         $this->assertCount(0, $metric2->getTags());
-        $metric2->setTags(array(
+        $metric2->setTags(
+            array(
                 array('foo', 'bar'),
-                array('bar', 'baz')
-            ));
+                array('bar', 'baz'),
+            )
+        );
+
         $this->assertCount(2, $metric2->getTags());
         $metric2->removeTags();
     }

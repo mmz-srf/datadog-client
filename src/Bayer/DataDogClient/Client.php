@@ -9,7 +9,7 @@ class Client {
     protected $applicationKey;
 
     public function __construct($apiKey, $applicationKey = null) {
-        $this->apiKey = $apiKey;
+        $this->apiKey         = $apiKey;
         $this->applicationKey = $applicationKey;
     }
 
@@ -27,6 +27,7 @@ class Client {
      */
     public function setApiKey($apiKey) {
         $this->apiKey = $apiKey;
+
         return $this;
     }
 
@@ -44,6 +45,7 @@ class Client {
      */
     public function setApplicationKey($applicationKey) {
         $this->applicationKey = $applicationKey;
+
         return $this;
     }
 
@@ -51,6 +53,7 @@ class Client {
         if (empty($series->getMetrics())) {
             throw new EmptySeriesException('The series must contain metric data to send');
         }
+
         return $this;
     }
 

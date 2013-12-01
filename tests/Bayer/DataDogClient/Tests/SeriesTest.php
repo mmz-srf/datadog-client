@@ -24,11 +24,13 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
 
         // Add multiple metrics
         $series2 = new Series();
-        $series2->addMetrics(array(
-            $metric1,
-            $metric2,
-            $metric3
-        ));
+        $series2->addMetrics(
+            array(
+                $metric1,
+                $metric2,
+                $metric3
+            )
+        );
         $this->assertCount(3, $series2->getMetrics());
         $this->assertEquals($metric1, $series2->getMetrics()['test1.metric.name']);
 
