@@ -248,8 +248,11 @@ class Event {
             'alert_type' => $this->getType(),
         );
 
-        if ($this->getTags()) {
-            $data['tags'] = $this->getTags();
+        if ($tags = $this->getTags()) {
+            $data['tags'] = array();
+            foreach ($tags as $tag => $value) {
+                $data['tags'][] = "$tag:$value";
+            }
         }
 
         if ($this->getAggregationKey()) {

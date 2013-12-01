@@ -197,16 +197,23 @@ class Metric {
     public function toArray() {
         $data = array(
             'metric' => $this->getName(),
-            'points' => $this->getPoints(),
-            'type'   => $this->getType()
+            'type'   => $this->getType(),
+            'points' => array(),
         );
+
+        foreach ($this->getPoints() as $point) {
+            $data['points'][] = $point->toArray();
+        }
 
         if ($host = $this->getHost()) {
             $data['host'] = $host;
         }
 
         if ($tags = $this->getTags()) {
-            $data['tags'] = $tags;
+            $data['tags'] = array();
+            foreach ($tags as $tag => $value) {
+                $data['tags'][] = "$tag:$value";
+            }
         }
 
         return $data;

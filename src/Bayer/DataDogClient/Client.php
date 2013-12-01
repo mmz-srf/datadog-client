@@ -70,6 +70,7 @@ class Client {
         curl_setopt($session, CURLOPT_POSTFIELDS, json_encode($series->toArray()));
         curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 
+        var_dump(json_encode($series->toArray()));
         var_dump(curl_exec($session));
         curl_close($session);
 
@@ -88,6 +89,7 @@ class Client {
         curl_setopt($session, CURLOPT_POSTFIELDS, json_encode($event->toArray()));
         curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 
+        var_dump(json_encode($event->toArray()));
         var_dump(curl_exec($session));
         curl_close($session);
 

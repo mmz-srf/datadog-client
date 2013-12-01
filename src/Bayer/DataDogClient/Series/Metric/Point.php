@@ -63,4 +63,11 @@ class Point {
 
         return $this;
     }
+
+    public function toArray() {
+        return array(
+            $this->getTimestamp(),
+            $this->getValue(),
+        );
+    }
 }
