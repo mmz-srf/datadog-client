@@ -4,6 +4,7 @@ namespace Bayer\DataDogClient;
 
 use Bayer\DataDogClient\Client\EmptyMetricException;
 use Bayer\DataDogClient\Client\EmptySeriesException;
+use Bayer\DataDogClient\Client\RequestException;
 use Bayer\DataDogClient\Series\Metric;
 
 /**
@@ -182,14 +183,36 @@ class Client {
     /**
      * @param $url
      * @param $data
+     * @throws Client\RequestException
      */
     protected function send($url, $data) {
+        // Prepare request
         $session = curl_init();
         curl_setopt($session, CURLOPT_URL, $url);
         curl_setopt($session, CURLOPT_CUSTOMREQUEST, 'POST');
-        curl_setopt($session, CURLOPT_HEADER, array('Content-Type: application/json'));
+        curl_setopt($session, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         curl_setopt($session, CURLOPT_POSTFIELDS, json_encode($data));
         curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+
+        // Send request
+        $response     = curl_exec($session);
+        $responseCode = (int)curl_getinfo($session, CURLINFO_HTTP_CODE);
+
+        // Check for api errors
+        if ($responseCode >= 400) {
+            $response = json_decode($response, true);
+            $message  = "Error $responseCode: ";
+            if (isset($response['errors'])) {
+                $message .= implode(' ', $response['errors']);
+            }
+
+            if (isset($response['warnings'])) {
+                $message .= implode(' ', $response['warnings']);
+            }
+
+            throw new RequestException($message, $responseCode);
+        }
+
         curl_close($session);
     }
 }
