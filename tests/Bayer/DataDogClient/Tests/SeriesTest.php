@@ -19,7 +19,7 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
         $this->assertCount(0, $series1->getMetrics());
         $series1->addMetric($metric1);
         $this->assertCount(1, $series1->getMetrics());
-        $this->assertEquals($metric1, $series1->getMetrics()['test1.metric.name']);
+        $this->assertEquals($metric1, $series1->getMetric('test1.metric.name'));
 
         // Add multiple metrics
         $series2 = new Series();
@@ -31,7 +31,7 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
             )
         );
         $this->assertCount(3, $series2->getMetrics());
-        $this->assertEquals($metric1, $series2->getMetrics()['test1.metric.name']);
+        $this->assertEquals($metric1, $series2->getMetric('test1.metric.name'));
 
         // Set metrics
         $series3 = new Series();
@@ -39,15 +39,20 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
         $this->assertCount(3, $series3->getMetrics());
         $series3->setMetrics(array($metric1));
         $this->assertCount(1, $series3->getMetrics());
-        $this->assertEquals($metric1, $series3->getMetrics()['test1.metric.name']);
+        $this->assertEquals($metric1, $series3->getMetric('test1.metric.name'));
 
-        // Add metric by constructor
+        // Add multiple metric by constructor
         $series4 = new Series(array(
             $metric1,
             $metric2,
             $metric3
         ));
         $this->assertCount(3, $series4->getMetrics());
+
+        // Add one metric by constructor
+        $series5 = new Series($metric1);
+        $this->assertCount(1, $series5->getMetrics());
+        $this->assertEquals($metric1, $series5->getMetric('test1.metric.name'));
     }
 
     public function testGetMetricByName() {
@@ -55,7 +60,10 @@ class SeriesTest extends \PHPUnit_Framework_TestCase {
         $metric = new Metric('test.metric.name', array(20));
 
         $series->addMetric($metric);
+        $this->assertCount(1, $series->getMetrics());
         $this->assertEquals($metric, $series->getMetric('test.metric.name'));
+        $this->assertEquals($metric, array_shift(array_values($series->getMetrics())));
+        $this->assertEquals($metric, $series->getMetrics()['test.metric.name']);
     }
 
     /**

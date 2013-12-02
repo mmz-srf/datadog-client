@@ -118,4 +118,22 @@ class MetricTest extends \PHPUnit_Framework_TestCase {
         $this->assertCount(3, $metric3->getPoints());
         $this->assertEquals($points[0], $metric3->getPoints()[0]);
     }
+
+    /**
+     * @expectedException \Bayer\DataDogClient\Series\Metric\InvalidPointException
+     */
+    public function testInvalidPointTimestampThrowsException() {
+        new Metric('test.metric.name', array(
+            array('now', 20)
+        ));
+    }
+
+    /**
+     * @expectedException \Bayer\DataDogClient\Series\Metric\InvalidPointException
+     */
+    public function testInvalidPointValueThrowsException() {
+        new Metric('test.metric.name', array(
+            array('20')
+        ));
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Bayer\DataDogClient\Series;
 
+use Bayer\DataDogClient\AbstractDataObject;
 use Bayer\DataDogClient\Series\Metric\InvalidPointException;
 use Bayer\DataDogClient\Series\Metric\InvalidTypeException;
 
@@ -15,7 +16,7 @@ use Bayer\DataDogClient\Series\Metric\InvalidTypeException;
  *
  * @package Bayer\DataDogClient\Series
  */
-class Metric {
+class Metric extends AbstractDataObject {
 
     const TYPE_GAUGE   = 'gauge';
     const TYPE_COUNTER = 'counter';
@@ -44,13 +45,6 @@ class Metric {
     protected $host;
 
     /**
-     * Tags for the metric
-     *
-     * @var array
-     */
-    protected $tags = array();
-
-    /**
      * Measurement points of the metric
      *
      * For details, see `Metric::addPoint`
@@ -70,7 +64,7 @@ class Metric {
      */
     public function __construct($name, array $points) {
         // Allow constructing with a single point
-        if (is_numeric($points[0])) {
+        if (isset($points[0]) && is_numeric($points[0])) {
             $points = array($points);
         }
 
@@ -133,58 +127,6 @@ class Metric {
      */
     public function setHost($host) {
         $this->host = $host;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTags() {
-        return $this->tags;
-    }
-
-    /**
-     * @param array $tags
-     *
-     * @return Metric
-     */
-    public function setTags($tags) {
-        $this->tags = $tags;
-
-        return $this;
-    }
-
-    /**
-     * @param string $name
-     * @param string $value
-     *
-     * @return Metric
-     */
-    public function addTag($name, $value) {
-        $this->tags[$name] = $value;
-
-        return $this;
-    }
-
-    /**
-     * @param $name
-     *
-     * @return Metric
-     */
-    public function removeTag($name) {
-        if (isset($this->tags[$name])) {
-            unset($this->tags[$name]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Metric
-     */
-    public function removeTags() {
-        $this->tags = array();
 
         return $this;
     }

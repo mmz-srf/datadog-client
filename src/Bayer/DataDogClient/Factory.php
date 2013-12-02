@@ -20,7 +20,7 @@ class Factory {
      *
      * @return Metric
      */
-    public static function buildMetric($name, array $points, array $options) {
+    public static function buildMetric($name, array $points, array $options = array()) {
         $metric = new  Metric($name, $points);
 
         foreach ($options as $property => $value) {
@@ -37,7 +37,7 @@ class Factory {
      *
      * @return Event
      */
-    public static function buildEvent($text, $title = '', array $options) {
+    public static function buildEvent($text, $title = '', array $options = array()) {
         $event = new Event($text, $title);
 
         foreach ($options as $property => $value) {
@@ -57,8 +57,8 @@ class Factory {
         $method = 'set' . ucfirst($property);
         if (!method_exists($object, $method)) {
             throw new InvalidPropertyException('Unable to call ' . get_class(
-                $object
-            ) . '::' . $method . '(' . $value . ')');
+                    $object
+                ) . '::' . $method . '(' . $value . ')');
         }
         $object->$method($value);
     }

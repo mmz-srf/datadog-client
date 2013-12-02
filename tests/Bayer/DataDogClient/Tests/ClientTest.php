@@ -72,7 +72,65 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
             ->setPriority(Event::PRIORITY_LOW);
 
         $this->client->sendEvent($event);
+    }
 
+    public function testSendMetric() {
+        $metric1 = new Metric('test.metric.name', array(
+            array(time(), 20),
+            array(time() - 5, 15),
+            array(time() - 10, 10),
+        ));
+
+        $this->client->sendMetric($metric1);
+    }
+
+    public function testCreatingMetricWithEmptyPointArray() {
+        $metric = new Metric('test.metric.name', array());
+        $this->assertEmpty($metric->getPoints());
+    }
+
+    /**
+     * @expectedException \Bayer\DataDogClient\Client\EmptyMetricException
+     */
+    public function testSendingEmptyMetricThrowsException() {
+        $metric = new Metric('test.metric.name', array(20));
+        $metric->removePoints();
+        $this->client->sendMetric($metric);
+    }
+
+    public function testSendMetricWithShortcutMethod() {
+        $this->client->metric(
+            'shortcut.metric',
+            array(
+                array(time(), 20),
+                array(time() - 5, 15),
+                array(time() - 10, 10),
+            )
+        );
+
+        $this->client->metric('shortcut.metric', array(20));
+
+        $this->client->metric(
+            'custom.metric',
+            array(20),
+            array(
+                'host' => 'foo.com',
+                'type' => Metric::TYPE_COUNTER
+            )
+        );
+    }
+
+    public function testSendEventWithShortcutMethod() {
+        $this->client->event('Test Event', 'My Event');
+
+        $this->client->event(
+            'Test Event',
+            'My Event',
+            array(
+                'priority'  => Event::PRIORITY_LOW,
+                'timestamp' => time() - 1234
+            )
+        );
     }
 
     /**

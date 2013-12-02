@@ -139,7 +139,7 @@ class Client {
      *
      * @return Client
      */
-    public function metric($name, array $points, array $options) {
+    public function metric($name, array $points, array $options = array()) {
         return $this->sendMetric(
             Factory::buildMetric($name, $points, $options)
         );
@@ -157,7 +157,7 @@ class Client {
      *
      * @return Client
      */
-    public function event($text, $title = '', array $options) {
+    public function event($text, $title = '', array $options = array()) {
         return $this->sendEvent(
             Factory::buildEvent($text, $title, $options)
         );

@@ -14,7 +14,7 @@ use Bayer\DataDogClient\Event\InvalidPriorityException;
  *
  * @package Bayer\DataDogClient
  */
-class Event {
+class Event extends AbstractDataObject {
 
     const PRIORITY_NORMAL = 'normal';
     const PRIORITY_LOW    = 'low';
@@ -66,13 +66,6 @@ class Event {
      * @var string
      */
     protected $priority;
-
-    /**
-     * Tags of the event
-     *
-     * @var array
-     */
-    protected $tags = array();
 
     /**
      * Event type
@@ -186,58 +179,6 @@ class Event {
             throw new InvalidPriorityException('Priority must be on of Event::PRIORITY_*');
         }
         $this->priority = $priority;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTags() {
-        return $this->tags;
-    }
-
-    /**
-     * @param array $tags
-     *
-     * @return Event
-     */
-    public function setTags($tags) {
-        $this->tags = $tags;
-
-        return $this;
-    }
-
-    /**
-     * @param string $name
-     * @param string $value
-     *
-     * @return Event
-     */
-    public function addTag($name, $value) {
-        $this->tags[$name] = $value;
-
-        return $this;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Event
-     */
-    public function removeTag($name) {
-        if (isset($this->tags[$name])) {
-            unset($this->tags[$name]);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Event
-     */
-    public function removeTags() {
-        $this->tags = array();
 
         return $this;
     }
