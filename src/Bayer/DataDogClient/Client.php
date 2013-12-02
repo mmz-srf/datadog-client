@@ -2,6 +2,7 @@
 
 namespace Bayer\DataDogClient;
 
+use Bayer\DataDogClient\Client\EmptyMetricException;
 use Bayer\DataDogClient\Client\EmptySeriesException;
 use Bayer\DataDogClient\Series\Metric;
 use Bayer\DataDogClient\Series\Metric\Point;
@@ -57,8 +58,9 @@ class Client {
 
     /**
      * @param Series $series
-     * @return Client
      * @throws Client\EmptySeriesException
+     *
+     * @return Client
      */
     public function sendSeries(Series $series) {
         if (empty($series->getMetrics())) {
@@ -74,8 +76,25 @@ class Client {
     }
 
     /**
+     * @param Metric $metric
+     * @throws EmptyMetricException
+     *
+     * @return Client
+     */
+    public function sendMetric(Metric $metric) {
+        if (empty($metric->getPoints())) {
+            throw new EmptyMetricException('The metric must contain points to send');
+        }
+
+        $this->sendSeries(new Series($metric));
+
+        return $this;
+    }
+
+    /**
      * @param Event $event
-     * @return $this
+     *
+     * @return Client
      */
     public function sendEvent(Event $event) {
         $this->send(
@@ -97,7 +116,6 @@ class Client {
         curl_setopt($session, CURLOPT_HEADER, array('Content-Type: application/json'));
         curl_setopt($session, CURLOPT_POSTFIELDS, json_encode($data));
         curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
-
         curl_close($session);
     }
 }
