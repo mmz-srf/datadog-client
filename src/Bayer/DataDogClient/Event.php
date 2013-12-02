@@ -6,6 +6,14 @@ use Bayer\DataDogClient\Event\InvalidTypeException;
 use Bayer\DataDogClient\Event\InvalidSourceTypeException;
 use Bayer\DataDogClient\Event\InvalidPriorityException;
 
+/**
+ * Class Event
+ *
+ * An event is shown in the datadog timeline and consists of
+ * at least an event text.
+ *
+ * @package Bayer\DataDogClient
+ */
 class Event {
 
     const PRIORITY_NORMAL = 'normal';
@@ -29,15 +37,75 @@ class Event {
     const SOURCE_FABRIC     = 'fabric';
     const SOURCE_CAPISTRANO = 'capistrano';
 
+    /**
+     * Title of the event
+     *
+     * @var string
+     */
     protected $title;
+
+    /**
+     * The event message
+     *
+     * @var string
+     */
     protected $text;
+
+    /**
+     * Timestamp when the event occured
+     *
+     * @var int
+     */
     protected $timestamp;
+
+    /**
+     * Event priority
+     *
+     * Datadog supports low and normal
+     *
+     * @var string
+     */
     protected $priority;
+
+    /**
+     * Tags of the event
+     *
+     * @var array
+     */
     protected $tags = array();
+
+    /**
+     * Event type
+     *
+     * Datadog supports info, warning, error and success
+     *
+     * @var string
+     */
     protected $type;
+
+    /**
+     * Arbitary string used to group events
+     *
+     * @var string
+     */
     protected $aggregationKey;
+
+    /**
+     * Type of the event source
+     *
+     * This indicated which source fired the event.
+     * Datadog supports:
+     * nagios, hudson, jenkins, user, my apps, feed,
+     * chef, puppet, git, bitbucket, fabric, capistrano
+     *
+     * @var string
+     */
     protected $sourceType;
 
+    /**
+     * @param string $text
+     * @param string $title
+     */
     public function __construct($text, $title = '') {
         $this->setText($text)
             ->setTitle($title)

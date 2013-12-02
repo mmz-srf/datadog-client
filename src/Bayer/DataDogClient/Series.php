@@ -5,8 +5,19 @@ namespace Bayer\DataDogClient;
 use Bayer\DataDogClient\Series\Metric;
 use Bayer\DataDogClient\Series\MetricNotFoundException;
 
+/**
+ * Class Series
+ *
+ * Metric data can only be sent to datadog encapsulated
+ * in a series. A series is a simple container for one
+ * or more metric objects.
+ *
+ * @package Bayer\DataDogClient
+ */
 class Series {
     /**
+     * Metrics in this series
+     *
      * @var Metric[]
      */
     protected $metrics = array();

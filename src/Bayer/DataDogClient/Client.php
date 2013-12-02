@@ -5,19 +5,48 @@ namespace Bayer\DataDogClient;
 use Bayer\DataDogClient\Client\EmptyMetricException;
 use Bayer\DataDogClient\Client\EmptySeriesException;
 use Bayer\DataDogClient\Series\Metric;
-use Bayer\DataDogClient\Series\Metric\Point;
 
+/**
+ * Class Client
+ *
+ * This client is used to send series and events to datadog and
+ * handles to serialization of objects into the right format.
+ *
+ * Use the methods `Client::sendEvent`, `Client::sendMetric` or `Client::sendSeries`
+ * to send previously build objects through the wire.
+ * Alternatively, you can use `Client::metric` or `Client::event` methods to send
+ * data without having to build objects first.
+ *
+ * @package Bayer\DataDogClient
+ */
 class Client {
 
     const ENDPOINT_EVENT  = 'https://app.datadoghq.com/api/v1/events?api_key=';
     const ENDPOINT_SERIES = 'https://app.datadoghq.com/api/v1/series?api_key=';
 
+    /**
+     * Your personal API key
+     *
+     * @var string
+     */
     protected $apiKey;
+
+    /**
+     * Application key for read actions.
+     * Currently unused
+     *
+     * @var null|string
+     */
     protected $applicationKey;
 
+    /**
+     * @param string      $apiKey
+     * @param null|string $applicationKey
+     */
     public function __construct($apiKey, $applicationKey = null) {
         $this->apiKey         = $apiKey;
         $this->applicationKey = $applicationKey;
+
     }
 
     /**
@@ -57,6 +86,8 @@ class Client {
     }
 
     /**
+     * Send a Series object to datadog
+     *
      * @param Series $series
      * @throws Client\EmptySeriesException
      *
@@ -76,6 +107,11 @@ class Client {
     }
 
     /**
+     * Send a Metric object to datadog
+     *
+     * The metric object will be encapsulated into a
+     * dummy series, as the datadog API requires.
+     *
      * @param Metric $metric
      * @throws EmptyMetricException
      *
@@ -92,6 +128,44 @@ class Client {
     }
 
     /**
+     * Send metric data to datadog
+     *
+     * The given values will be used to create a new Metric
+     * object, encapsulated it into a Series and sent.
+     *
+     * @param string $name
+     * @param array  $points
+     * @param array  $options
+     *
+     * @return Client
+     */
+    public function metric($name, array $points, array $options) {
+        return $this->sendMetric(
+            Factory::buildMetric($name, $points, $options)
+        );
+    }
+
+    /**
+     * Send an event to datadog
+     *
+     * The given values will be used to create a new Event
+     * object which will be sent.
+     *
+     * @param string $text
+     * @param string $title
+     * @param array  $options
+     *
+     * @return Client
+     */
+    public function event($text, $title = '', array $options) {
+        return $this->sendEvent(
+            Factory::buildEvent($text, $title, $options)
+        );
+    }
+
+    /**
+     * Send an Event object to datadog
+     *
      * @param Event $event
      *
      * @return Client

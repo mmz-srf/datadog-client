@@ -5,15 +5,58 @@ namespace Bayer\DataDogClient\Series;
 use Bayer\DataDogClient\Series\Metric\InvalidPointException;
 use Bayer\DataDogClient\Series\Metric\InvalidTypeException;
 
+/**
+ * Class Metric
+ *
+ * Measurement points must be packages in a metric. A metric consists
+ * of at least the name and one point.
+ *
+ * Please see Metric::addPoint for more details of the point structure
+ *
+ * @package Bayer\DataDogClient\Series
+ */
 class Metric {
 
     const TYPE_GAUGE   = 'gauge';
     const TYPE_COUNTER = 'counter';
 
+    /**
+     * Name of the metric
+     *
+     * @var string
+     */
     protected $name;
+
+    /**
+     * Type of the metric
+     *
+     * Datadog supports gauge or counter
+     *
+     * @var string
+     */
     protected $type;
+
+    /**
+     * Hostname of the source machine
+     *
+     * @var string
+     */
     protected $host;
+
+    /**
+     * Tags for the metric
+     *
+     * @var array
+     */
     protected $tags = array();
+
+    /**
+     * Measurement points of the metric
+     *
+     * For details, see `Metric::addPoint`
+     *
+     * @var array
+     */
     protected $points = array();
 
     /**
@@ -55,14 +98,14 @@ class Metric {
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getType() {
         return $this->type;
     }
 
     /**
-     * @param mixed $type
+     * @param string $type
      * @throws InvalidTypeException
      *
      * @return Metric
@@ -77,14 +120,14 @@ class Metric {
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getHost() {
         return $this->host;
     }
 
     /**
-     * @param mixed $host
+     * @param string $host
      *
      * @return Metric
      */
@@ -113,8 +156,8 @@ class Metric {
     }
 
     /**
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param string $value
      *
      * @return Metric
      */
