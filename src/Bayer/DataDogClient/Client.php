@@ -95,7 +95,8 @@ class Client {
      * @return Client
      */
     public function sendSeries(Series $series) {
-        if (empty($series->getMetrics())) {
+        $metrics = $series->getMetrics();
+        if (empty($metrics)) {
             throw new EmptySeriesException('The series must contain metric data to send');
         }
 
@@ -119,7 +120,8 @@ class Client {
      * @return Client
      */
     public function sendMetric(Metric $metric) {
-        if (empty($metric->getPoints())) {
+        $points = $metric->getPoints();
+        if (empty($points)) {
             throw new EmptyMetricException('The metric must contain points to send');
         }
 
