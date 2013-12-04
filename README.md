@@ -160,8 +160,13 @@ no timestamp is specified, the current timestamp will be used. Order
 matters. If a timestamp is specified, it should be the first value.
 
 Examples:
-  Simple point:   array(20)
-  With timestamp: array(1234567, 20)
+```
+  // Timestamp will be set to time()
+  $simplePoint = array(20);
+  
+  // Set timestamp to explicit value
+  $pointWithTimestamp = array(1234567, 20);
+```
 
 
 
