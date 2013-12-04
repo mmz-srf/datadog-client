@@ -54,12 +54,25 @@ class Factory {
      * @throws InvalidPropertyException
      */
     protected static function setProperty($object, $property, $value) {
-        $method = 'set' . ucfirst($property);
+        $method = self::getMethodName($property);
+
         if (!method_exists($object, $method)) {
             throw new InvalidPropertyException('Unable to call ' . get_class(
                     $object
                 ) . '::' . $method . '(' . $value . ')');
         }
         $object->$method($value);
+    }
+
+    /**
+     * Transform `under_score` property names to `getUnderScore` method names
+     *
+     * @param $string
+     * @return mixed
+     */
+    protected static function getMethodName($string) {
+        return 'set' . preg_replace_callback('/_([a-z])/', function($chunk) {
+            return strtoupper($chunk[1]);
+        }, $string);
     }
 }
