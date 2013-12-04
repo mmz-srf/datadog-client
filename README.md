@@ -52,7 +52,7 @@ $client->event('My test event', 'Optional event title', array(
 ### Event Properties
 
 
-#### date_happened
+#### dateHappened
 
 Type: `integer`
 
@@ -64,7 +64,7 @@ Type: `Event::PRIORITY_`
 
 Event priority. Datadog supports LOW and NORMAL
 
-#### alert_type
+#### alertType
 
 Type: `Event::TYPE_`
 
@@ -131,6 +131,12 @@ $client->metric('my.test.metric', array(
 ### Metric Properties
 
 
+#### name
+
+Type: `string`
+
+Name of the metric. Can contain underscored or dots for easier grouping, e.g. web.exception.404
+
 #### type
 
 Type: `Metric::TYPE_`
@@ -142,3 +148,22 @@ Type of the metric. Datadog supports gauge or counter
 Type: `string`
 
 Hostname of the source machine
+
+#### points
+
+Type: `array`
+
+Array of data points.
+
+A point consists of an optional timestamp and a numeric value. If
+no timestamp is specified, the current timestamp will be used. Order
+matters. If a timestamp is specified, it should be the first value.
+
+Examples:
+  Simple point:   array(20)
+  With timestamp: array(1234567, 20)
+
+
+
+
+
