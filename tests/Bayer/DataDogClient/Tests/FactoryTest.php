@@ -33,19 +33,19 @@ class FactoryTest extends \PHPUnit_Framework_TestCase {
             'This is a dummy event',
             'My Event',
             array(
-                'timestamp'      => 123456,
-                'priority'       => Event::PRIORITY_LOW,
-                'type'           => Event::TYPE_SUCCESS,
-                'sourceType'     => Event::SOURCE_BITBUCKET,
-                'aggregationKey' => 'foo.bar',
-                'tags'           => array('foo' => 'bar')
+                'date_happened'    => 123456,
+                'priority'         => Event::PRIORITY_LOW,
+                'alert_type'       => Event::TYPE_SUCCESS,
+                'source_type_name' => Event::SOURCE_BITBUCKET,
+                'aggregationKey'   => 'foo.bar',
+                'tags'             => array('foo' => 'bar')
             )
         );
 
-        $this->assertEquals(123456, $event->getTimestamp());
+        $this->assertEquals(123456, $event->getDateHappened());
         $this->assertEquals(Event::PRIORITY_LOW, $event->getPriority());
-        $this->assertEquals(Event::TYPE_SUCCESS, $event->getType());
-        $this->assertEquals(Event::SOURCE_BITBUCKET, $event->getSourceType());
+        $this->assertEquals(Event::TYPE_SUCCESS, $event->getAlertType());
+        $this->assertEquals(Event::SOURCE_BITBUCKET, $event->getSourceTypeName());
         $this->assertEquals('foo.bar', $event->getAggregationKey());
         $this->assertEquals(array('foo' => 'bar'), $event->getTags());
 

@@ -66,8 +66,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
     public function testSendEvent() {
         $event = new Event('TestEvent', 'This is a testevent');
         $event->addTag('foo', 'bar')
-            ->setType(Event::TYPE_SUCCESS)
-            ->setSourceType(Event::SOURCE_MYAPPS)
+            ->setAlertType(Event::TYPE_SUCCESS)
+            ->setSourceTypeName(Event::SOURCE_MYAPPS)
             ->setAggregationKey('unittest')
             ->setPriority(Event::PRIORITY_LOW);
 
@@ -127,8 +127,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
             'Test Event',
             'My Event',
             array(
-                'priority'  => Event::PRIORITY_LOW,
-                'timestamp' => time() - 1234
+                'priority'      => Event::PRIORITY_LOW,
+                'date_happened' => time() - 1234
             )
         );
     }

@@ -71,8 +71,12 @@ class Factory {
      * @return mixed
      */
     protected static function getMethodName($string) {
-        return 'set' . preg_replace_callback('/_([a-z])/', function($chunk) {
-            return strtoupper($chunk[1]);
-        }, $string);
+        return 'set' . preg_replace_callback(
+            '/_([a-z])/',
+            function ($chunk) {
+                return strtoupper($chunk[1]);
+            },
+            $string
+        );
     }
 }

@@ -34,7 +34,7 @@ $client->sendEvent($myEvent);
 Additional properties can be set the usual way:
 
 ```
-$myEvent->setType(Event::TYPE_ERROR);
+$myEvent->setAlertType(Event::TYPE_ERROR);
 ```
 
 
@@ -43,14 +43,14 @@ $myEvent->setType(Event::TYPE_ERROR);
 ```
 // Create and send event in one call
 $client->event('My test event', 'Optional event title', array(
-    'type' => Event::TYPE_ERROR
+    'alert_type' => Event::TYPE_ERROR
 ));
 ```
 
 ### Event Properties
 
 
-#### timestamp 
+#### date_happened
 
 Type: `integer`
 
@@ -62,11 +62,11 @@ Type: `Event::PRIORITY_`
 
 Event priority. Datadog supports LOW and NORMAL
 
-#### type
+#### alert_type
 
 Type: `Event::TYPE_`
 
-Event type. Datadog supports INFO, WARNING, ERROR and SUCCESS
+Event alert_type. Datadog supports INFO, WARNING, ERROR and SUCCESS
 
 #### aggregationKey
 

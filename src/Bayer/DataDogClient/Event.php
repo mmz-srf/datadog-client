@@ -2,7 +2,7 @@
 
 namespace Bayer\DataDogClient;
 
-use Bayer\DataDogClient\Event\InvalidTypeException;
+use Bayer\DataDogClient\Event\InvalidAlertTypeException;
 use Bayer\DataDogClient\Event\InvalidSourceTypeException;
 use Bayer\DataDogClient\Event\InvalidPriorityException;
 
@@ -56,7 +56,7 @@ class Event extends AbstractDataObject {
      *
      * @var int
      */
-    protected $timestamp;
+    protected $dateHappened;
 
     /**
      * Event priority
@@ -68,13 +68,13 @@ class Event extends AbstractDataObject {
     protected $priority;
 
     /**
-     * Event type
+     * Event alert type
      *
      * Datadog supports info, warning, error and success
      *
      * @var string
      */
-    protected $type;
+    protected $alertType;
 
     /**
      * Arbitary string used to group events
@@ -93,7 +93,7 @@ class Event extends AbstractDataObject {
      *
      * @var string
      */
-    protected $sourceType;
+    protected $sourceTypeName;
 
     /**
      * @param string $text
@@ -102,9 +102,9 @@ class Event extends AbstractDataObject {
     public function __construct($text, $title = '') {
         $this->setText($text)
             ->setTitle($title)
-            ->setTimestamp(time())
+            ->setDateHappened(time())
             ->setPriority(self::PRIORITY_NORMAL)
-            ->setType(self::TYPE_INFO);
+            ->setAlertType(self::TYPE_INFO);
     }
 
     /**
@@ -146,8 +146,8 @@ class Event extends AbstractDataObject {
     /**
      * @return int
      */
-    public function getTimestamp() {
-        return $this->timestamp;
+    public function getDateHappened() {
+        return $this->dateHappened;
     }
 
     /**
@@ -155,8 +155,8 @@ class Event extends AbstractDataObject {
      *
      * @return Event
      */
-    public function setTimestamp($timestamp) {
-        $this->timestamp = $timestamp;
+    public function setDateHappened($timestamp) {
+        $this->dateHappened = $timestamp;
 
         return $this;
     }
@@ -186,21 +186,21 @@ class Event extends AbstractDataObject {
     /**
      * @return mixed
      */
-    public function getType() {
-        return $this->type;
+    public function getAlertType() {
+        return $this->alertType;
     }
 
     /**
      * @param mixed $type
-     * @throws InvalidTypeException
+     * @throws InvalidAlertTypeException
      *
      * @return Event
      */
-    public function setType($type) {
+    public function setAlertType($type) {
         if (!$this->isValidType($type)) {
-            throw new InvalidTypeException('Type must be one of Event::TYPE_*');
+            throw new InvalidAlertTypeException('Type must be one of Event::TYPE_*');
         }
-        $this->type = $type;
+        $this->alertType = $type;
 
         return $this;
     }
@@ -226,8 +226,8 @@ class Event extends AbstractDataObject {
     /**
      * @return mixed
      */
-    public function getSourceType() {
-        return $this->sourceType;
+    public function getSourceTypeName() {
+        return $this->sourceTypeName;
     }
 
     /**
@@ -236,11 +236,11 @@ class Event extends AbstractDataObject {
      *
      * @return Event
      */
-    public function setSourceType($sourceType) {
+    public function setSourceTypeName($sourceType) {
         if (!$this->isValidSourceType($sourceType)) {
             throw new InvalidSourceTypeException('SourceTyoe must be on of Event::SOURCE_*');
         }
-        $this->sourceType = $sourceType;
+        $this->sourceTypeName = $sourceType;
 
         return $this;
     }
@@ -252,9 +252,9 @@ class Event extends AbstractDataObject {
         $data = array(
             'title'         => $this->getTitle(),
             'text'          => $this->getText(),
-            'date_happened' => $this->getTimestamp(),
+            'date_happened' => $this->getDateHappened(),
             'priority'      => $this->getPriority(),
-            'alert_type'    => $this->getType(),
+            'alert_type'    => $this->getAlertType(),
         );
 
         if ($tags = $this->getTags()) {
@@ -268,8 +268,8 @@ class Event extends AbstractDataObject {
             $data['aggregation_key'] = $this->getAggregationKey();
         }
 
-        if ($this->getSourceType()) {
-            $data['source_type_name'] = $this->getSourceType();
+        if ($this->getSourceTypeName()) {
+            $data['source_type_name'] = $this->getSourceTypeName();
         }
 
         return $data;

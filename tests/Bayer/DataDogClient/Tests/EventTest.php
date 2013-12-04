@@ -19,10 +19,10 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 
     public function testGetAndSetTimestamp() {
         $event = new Event('Text', 'Title');
-        $this->assertEquals(time(), $event->getTimestamp());
+        $this->assertEquals(time(), $event->getDateHappened());
 
-        $event->setTimestamp(123456789);
-        $this->assertEquals(123456789, $event->getTimestamp());
+        $event->setDateHappened(123456789);
+        $this->assertEquals(123456789, $event->getDateHappened());
     }
 
     public function testGetAndSetPriority() {
@@ -72,18 +72,18 @@ class EventTest extends \PHPUnit_Framework_TestCase {
     public function testGetAndSetAlertType() {
         $event = new Event('Text', 'Title');
 
-        $this->assertEquals(Event::TYPE_INFO, $event->getType());
+        $this->assertEquals(Event::TYPE_INFO, $event->getAlertType());
 
-        $event->setType(Event::TYPE_ERROR);
-        $this->assertEquals(Event::TYPE_ERROR, $event->getType());
+        $event->setAlertType(Event::TYPE_ERROR);
+        $this->assertEquals(Event::TYPE_ERROR, $event->getAlertType());
     }
 
     /**
-     * @expectedException \Bayer\DataDogClient\Event\InvalidTypeException
+     * @expectedException \Bayer\DataDogClient\Event\InvalidAlertTypeException
      */
     public function testInvalidTypeThrowsException() {
         $event = new Event('Text', 'Title');
-        $event->setType('foo');
+        $event->setAlertType('foo');
     }
 
     public function testGetAndSetAggregationKey() {
@@ -96,10 +96,10 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 
     public function testGetAndSetSourceType() {
         $event = new Event('Text', 'Title');
-        $this->assertNull($event->getSourceType());
+        $this->assertNull($event->getSourceTypeName());
 
-        $event->setSourceType(Event::SOURCE_NAGIOS);
-        $this->assertEquals(Event::SOURCE_NAGIOS, $event->getSourceType());
+        $event->setSourceTypeName(Event::SOURCE_NAGIOS);
+        $this->assertEquals(Event::SOURCE_NAGIOS, $event->getSourceTypeName());
     }
 
     /**
@@ -107,6 +107,6 @@ class EventTest extends \PHPUnit_Framework_TestCase {
      */
     public function testInvalidSourceTypeThrowsException() {
         $event = new Event('Text', 'Title');
-        $event->setSourceType('foo');
+        $event->setSourceTypeName('foo');
     }
 }
