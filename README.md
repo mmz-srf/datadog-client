@@ -2,13 +2,15 @@
 > Lightweight php-only datadog client
 
 This is a simple php client for datadog which does not require setting up the [DataDog Agent](https://app.datadoghq.com/account/settings#agent)
+This library supports sending metric data or events at the moment, as those should be the most common use cases.
+Feel free to extend it to your own needs or sending pull requests.
 
 ## Installation
 
 This library can be installed using composer
 
 ```
-composer require bayer/datadog-client-php
+composer require matthiasbayer/datadog-client
 ```
 
 
