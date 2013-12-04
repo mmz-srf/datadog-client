@@ -9,8 +9,8 @@ use Bayer\DataDogClient\Series\Metric;
 
 class ClientTest extends \PHPUnit_Framework_TestCase {
 
-    const API_KEY = '';
-    const APP_KEY = '';
+    const API_KEY = 'test';
+    const APP_KEY = 'test';
 
     /**
      * @var Client
