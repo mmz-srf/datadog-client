@@ -19,7 +19,7 @@ use Bayer\DataDogClient\Series\Metric\InvalidTypeException;
 class Metric extends AbstractDataObject {
 
     const TYPE_GAUGE   = 'gauge';
-    const TYPE_COUNTER = 'counter';
+    const TYPE_COUNTER = 'count';
 
     /**
      * Name of the metric
